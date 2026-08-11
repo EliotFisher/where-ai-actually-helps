@@ -28,7 +28,7 @@ const triples: Record<string,string[][]> = {
 };
 
 export default function Home(){
-  const [index,setIndex]=useState(0),[demo,setDemo]=useState(false),[overview,setOverview]=useState(false);
+  const [index,setIndex]=useState(0),[copied,setCopied]=useState(false),[overview,setOverview]=useState(false);
   const [direction,setDirection]=useState<"forward"|"backward">("forward");
   const [revealed,setRevealed]=useState(1);
   const lock=useRef(false); const [title,body,type]=slides[index];
@@ -48,7 +48,7 @@ export default function Home(){
       {type==="turn"&&<blockquote><strong>AI can make a weak idea look finished.</strong><span>Claude and ChatGPT became my first working pair. The tools accelerated every redesign, but human judgment still determined whether the result was useful.</span></blockquote>}
       {type==="policy"&&<div className="browser-frame"><div className="browser-bar" aria-hidden="true"><i/><i/><i/><span>COL Policy Intelligence</span></div><img className="screen" src="/deck/image8.png" alt="COL Policy Intelligence application"/></div>}
       {type==="pivot"&&<div className="pivot"><article><small>COL POLICY INTELLIGENCE</small><h2>Monitor federal policy</h2><p>Collect, normalize, deduplicate, and rank new policy items for human review.</p></article><b>FOCUS<br/>SHIFT →</b><article><small>IOOS ECONOMIC IMPACT</small><h2>Build the evidence base</h2><p>Organize sources, trace claims, compare cases, and support defensible conclusions.</p></article></div>}
-      {type==="demo"&&<div className="demo-box">{demo?<iframe src="https://ocean-evidence-commons.eliotfi.chatgpt.site/" title="Ocean Evidence Commons demo"/>:<><img src="/deck/demo-fallback.png" alt="Live demo fallback"/><div><button onClick={()=>setDemo(true)}>Load demo</button><a href="https://ocean-evidence-commons.eliotfi.chatgpt.site/" target="_blank" rel="noreferrer">Open live demo ↗</a></div></>}</div>}
+      {type==="demo"&&<><div className="demo-source"><span>Source for the demo</span><code>https://doi.org/10.1093/icesjms/fsae126</code><button onClick={async()=>{await navigator.clipboard.writeText("https://doi.org/10.1093/icesjms/fsae126");setCopied(true);setTimeout(()=>setCopied(false),1800)}}>{copied?"Copied":"Copy DOI"}</button></div><div className="demo-box"><iframe src="https://ocean-evidence-commons.eliotfi.chatgpt.site/" title="Ocean Evidence Commons demo"/></div></>}
       {type==="value"&&<><div className="diagram-row"><img src="/deck/image2.jpeg" alt="Hurricane observing systems diagram"/><img src="/deck/image3.jpeg" alt="Animal Telemetry Network diagram"/></div><p className="callout">The prototype guides discussion. Source checks and human review remain essential.</p></>}
       {type==="workflow"&&<div className="workflow"><div><img src="/deck/image9.png" alt="Original MARACOOS Impact Hub"/><b>GitHub · Streamlit · Vercel · Railway · Supabase</b></div><span>became →</span><strong>ChatGPT Sites<br/>&amp;<br/>Supabase</strong></div>}
       {type==="prompt"&&<div className="prompt"><strong>START HERE<br/><em>Pick one task that takes 20 minutes</em></strong><p>“Help me improve this. First, ask me the questions you need to understand the task, the audience, and what a good result looks like.”</p></div>}

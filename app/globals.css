@@ -25,6 +25,11 @@
 .browser-frame .screen{display:block;width:100%;height:49vh;object-fit:cover;object-position:top;margin:0}
 .demo-box{border-radius:20px;box-shadow:0 24px 70px -28px rgba(8,63,77,.45)}
 .demo-box>img{object-fit:cover;object-position:top}
+.demo-source{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.8rem;width:100%;margin:.15rem 0 .8rem;padding:.7rem .8rem .7rem 1rem;background:rgba(255,255,255,.82);border:1px solid rgba(8,63,77,.12);border-radius:14px;box-shadow:0 10px 30px -20px rgba(8,63,77,.35)}
+.demo-source span{color:var(--teal);font-size:.72rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.demo-source code{min-width:0;overflow:hidden;color:var(--ink);font-size:.9rem;text-overflow:ellipsis;white-space:nowrap}
+.demo-source button{border:0;border-radius:999px;background:var(--deep);color:#fff;padding:.55rem .9rem;font-size:.78rem;font-weight:900;cursor:pointer}
+.scene-demo .demo-box{height:54vh;margin-top:0}
 .diagram-row img{object-fit:cover;object-position:top;padding:0;border-radius:var(--radius);box-shadow:var(--lift)}
 .pivot,.workflow,.prompt,.scene-turn blockquote{border-radius:var(--radius);box-shadow:var(--lift)}
 .pivot,.workflow,.prompt{background:var(--surface)}
@@ -39,4 +44,4 @@
 .staged-item:not(.revealed){animation:none!important}
 .staged-item.revealed{pointer-events:auto;animation:stage-drop .62s cubic-bezier(.22,1,.36,1) both!important}
 @keyframes stage-drop{from{opacity:0;transform:translateY(30px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
-@media(max-width:800px){.slide-dots{bottom:8.2vh;gap:5px}.slide-dots button{width:5px;height:5px}.slide-dots button.active{width:16px}.browser-frame{width:100%}.browser-frame .screen{height:43vh}}
+@media(max-width:800px){.slide-dots{bottom:8.2vh;gap:5px}.slide-dots button{width:5px;height:5px}.slide-dots button.active{width:16px}.browser-frame{width:100%}.browser-frame .screen{height:43vh}.demo-source{grid-template-columns:1fr auto}.demo-source span{grid-column:1/-1}.scene-demo .demo-box{height:50vh}}
