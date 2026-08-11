@@ -29,21 +29,22 @@ const triples: Record<string,string[][]> = {
 
 export default function Home(){
   const [index,setIndex]=useState(0),[demo,setDemo]=useState(false),[overview,setOverview]=useState(false);
+  const [direction,setDirection]=useState<"forward"|"backward">("forward");
   const lock=useRef(false); const [title,body,type]=slides[index];
-  const go=(n:number)=>setIndex(i=>Math.max(0,Math.min(14,i+n)));
+  const go=(n:number)=>{setDirection(n<0?"backward":"forward");setIndex(i=>Math.max(0,Math.min(14,i+n)))};
   useEffect(()=>{const wheel=(e:WheelEvent)=>{if(Math.abs(e.deltaY)<18||lock.current)return;e.preventDefault();lock.current=true;go(e.deltaY>0?1:-1);setTimeout(()=>lock.current=false,650)};const key=(e:KeyboardEvent)=>{if((e.target as HTMLElement).matches("button,a,input,textarea,iframe"))return;if(["ArrowRight","ArrowDown","PageDown"," "].includes(e.key)){e.preventDefault();go(1)}if(["ArrowLeft","ArrowUp","PageUp"].includes(e.key)){e.preventDefault();go(-1)}};addEventListener("wheel",wheel,{passive:false});addEventListener("keydown",key);return()=>{removeEventListener("wheel",wheel);removeEventListener("keydown",key)}},[]);
 
   return <main className={`deck scene-${type}`}>
     <div className="sea" aria-hidden="true"/>
     <header><span>{index===10?"PART TWO: FOR COL":"DAY 2 · SESSION 05"}</span><button onClick={()=>setOverview(true)}>Overview</button></header>
-    <section key={index} className="slide" aria-labelledby="slide-title">
+    <section key={index} className={`slide ${direction}`} aria-labelledby="slide-title">
       <div className="copy"><p className="eyebrow">{index===0||index===14?"WHERE AI ACTUALLY HELPS":""}</p><h1 id="slide-title">{title}</h1><p className="lede">{body}</p></div>
       {type==="title"&&<p className="byline">Boulder Retreat 2026 · Eliot Fisher</p>}
       {type==="history"&&<><div className="photo-row">{[["/deck/image.jpeg","LIFEGUARDING · EAST HAMPTON"],["/deck/image3.png","STONY BROOK · LONG ISLAND"],["/deck/image4.png","MIIS · MONTEREY"]].map(([src,label])=><figure key={src}><img src={src} alt={label}/><figcaption>{label}</figcaption></figure>)}</div><p className="callout">What can AI do now—and where could it create lasting value for COL?</p></>}
       {triples[type]&&<div className="triple">{triples[type].map(([h,p],i)=><article key={h} style={{"--i":i} as React.CSSProperties}><h2>{h}</h2><p>{p}</p></article>)}</div>}
       {type==="timeline"&&<div className="photo-row timeline">{[["/deck/image5.png","JUNE 1 · Question box"],["/deck/image6.png","JUNE 4 · Property first"],["/deck/image7.png","JUNE 5 · Clear product"]].map(([src,label])=><figure key={src}><img src={src} alt={label}/><figcaption>{label}</figcaption></figure>)}</div>}
       {type==="turn"&&<blockquote><strong>AI can make a weak idea look finished.</strong><span>Claude and ChatGPT became my first working pair. The tools accelerated every redesign, but human judgment still determined whether the result was useful.</span></blockquote>}
-      {type==="policy"&&<img className="screen" src="/deck/image8.png" alt="COL Policy Intelligence application"/>}
+      {type==="policy"&&<div className="browser-frame"><div className="browser-bar" aria-hidden="true"><i/><i/><i/><span>COL Policy Intelligence</span></div><img className="screen" src="/deck/image8.png" alt="COL Policy Intelligence application"/></div>}
       {type==="pivot"&&<div className="pivot"><article><small>COL POLICY INTELLIGENCE</small><h2>Monitor federal policy</h2><p>Collect, normalize, deduplicate, and rank new policy items for human review.</p></article><b>FOCUS<br/>SHIFT →</b><article><small>IOOS ECONOMIC IMPACT</small><h2>Build the evidence base</h2><p>Organize sources, trace claims, compare cases, and support defensible conclusions.</p></article></div>}
       {type==="demo"&&<div className="demo-box">{demo?<iframe src="https://ocean-evidence-commons.eliotfi.chatgpt.site/" title="Ocean Evidence Commons demo"/>:<><img src="/deck/demo-fallback.png" alt="Live demo fallback"/><div><button onClick={()=>setDemo(true)}>Load demo</button><a href="https://ocean-evidence-commons.eliotfi.chatgpt.site/" target="_blank" rel="noreferrer">Open live demo ↗</a></div></>}</div>}
       {type==="value"&&<><div className="diagram-row"><img src="/deck/image2.jpeg" alt="Hurricane observing systems diagram"/><img src="/deck/image3.jpeg" alt="Animal Telemetry Network diagram"/></div><p className="callout">The prototype guides discussion. Source checks and human review remain essential.</p></>}
@@ -52,6 +53,7 @@ export default function Home(){
     </section>
     <footer><span>CENTER FOR OCEAN LEADERSHIP</span><img src="/deck/image2.png" alt="UCP UCAR Community Programs"/></footer>
     <nav className="advance" aria-label="Slide navigation"><button onClick={()=>go(-1)} disabled={!index}>← <span>Back</span></button><button className="count" onClick={()=>setOverview(true)}>{String(index+1).padStart(2,"0")} / 15</button><button onClick={()=>go(1)} disabled={index===14}><span>Forward</span> →</button></nav>
+    <div className="slide-dots" aria-label={`Slide ${index+1} of 15`}>{slides.map((s,i)=><button key={s[0]} className={i===index?"active":""} aria-label={`Go to slide ${i+1}: ${s[0]}`} aria-current={i===index?"step":undefined} onClick={()=>{setDirection(i<index?"backward":"forward");setIndex(i)}}/>)}</div>
     <div className="progress"><i style={{width:`${(index+1)/15*100}%`}}/></div>
     {overview&&<div className="overview" role="dialog" aria-modal="true"><button className="x" onClick={()=>setOverview(false)}>Close ×</button><ol>{slides.map((s,i)=><li key={s[0]}><button onClick={()=>{setIndex(i);setOverview(false)}}><b>{String(i+1).padStart(2,"0")}</b>{s[0]}</button></li>)}</ol></div>}
   </main>
