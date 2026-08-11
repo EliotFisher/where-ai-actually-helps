@@ -50,7 +50,6 @@ function Visual({ type }: { type: string }) {
 export default function Home() {
   const [index, setIndex] = useState(0), [overview, setOverview] = useState(false), [presenter, setPresenter] = useState(false);
   const [seconds, setSeconds] = useState(0), [running, setRunning] = useState(false), [privateNote, setPrivateNote] = useState("");
-  const [exercise, setExercise] = useState({workflow:"", reviewer:"", experiment:""});
   const demoRef = useRef<HTMLIFrameElement>(null);
   const scene = scenes[index];
   const go = (delta:number) => setIndex(i => Math.max(0, Math.min(scenes.length - 1, i + delta)));
@@ -78,7 +77,6 @@ export default function Home() {
         {scene.type==='value' && <><Visual type="value"/><p className="closing">The prototype is ready to guide a discussion. It is not ready to operate without source checks and human review.</p></>}
         {scene.type==='tools' && <Visual type="tools"/>}
         {scene.type==='prompt' && <div className="prompt"><strong>START HERE<br/><em>Pick one task that takes 20 minutes</em></strong><blockquote>“Help me improve this. First, ask me the questions you need to understand the task, the audience, and what a good result looks like.”</blockquote><p>Then review the result, point out what is wrong or missing, and ask for the next version.</p></div>}
-        {scene.type==='exercise' && <form onSubmit={e=>e.preventDefault()}><label>Useful workflow<input value={exercise.workflow} onChange={e=>setExercise({...exercise,workflow:e.target.value})}/></label><label>Human reviewer<input value={exercise.reviewer} onChange={e=>setExercise({...exercise,reviewer:e.target.value})}/></label><label>Small experiment<input value={exercise.experiment} onChange={e=>setExercise({...exercise,experiment:e.target.value})}/></label><button type="button" onClick={()=>setExercise({workflow:"",reviewer:"",experiment:""})}>Reset</button></form>}
       </div>
       <footer><span>CENTER FOR OCEAN LEADERSHIP</span><img src="/deck/image2.png" alt="UCP UCAR Community Programs"/></footer>
     </section>
