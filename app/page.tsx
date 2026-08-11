@@ -36,8 +36,9 @@ export default function Home(){
   const go=(n:number)=>{setDirection(n<0?"backward":"forward");if(n>0&&staged&&revealed<3){setRevealed(v=>v+1);return}if(n<0&&staged&&revealed>1){setRevealed(v=>v-1);return}setRevealed(1);setIndex(i=>Math.max(0,Math.min(14,i+n)))};
   useEffect(()=>{const wheel=(e:WheelEvent)=>{if(Math.abs(e.deltaY)<18||lock.current)return;e.preventDefault();lock.current=true;go(e.deltaY>0?1:-1);setTimeout(()=>lock.current=false,650)};const key=(e:KeyboardEvent)=>{if((e.target as HTMLElement).matches("button,a,input,textarea,iframe"))return;if(["ArrowRight","ArrowDown","PageDown"," "].includes(e.key)){e.preventDefault();go(1)}if(["ArrowLeft","ArrowUp","PageUp"].includes(e.key)){e.preventDefault();go(-1)}};addEventListener("wheel",wheel,{passive:false});addEventListener("keydown",key);return()=>{removeEventListener("wheel",wheel);removeEventListener("keydown",key)}},[staged,revealed]);
 
-  return <main className={`deck scene-${type}`}>
+  return <main className={`deck scene-${type}`} onPointerMove={e=>{const x=e.clientX/window.innerWidth-.5,y=e.clientY/window.innerHeight-.5;e.currentTarget.style.setProperty("--pointer-x",`${(x+.5)*100}%`);e.currentTarget.style.setProperty("--pointer-y",`${(y+.5)*100}%`);e.currentTarget.style.setProperty("--drift-x",`${x*-18}px`);e.currentTarget.style.setProperty("--drift-y",`${y*-12}px`)}} onPointerLeave={e=>{e.currentTarget.style.removeProperty("--pointer-x");e.currentTarget.style.removeProperty("--pointer-y");e.currentTarget.style.removeProperty("--drift-x");e.currentTarget.style.removeProperty("--drift-y")}}>
     <div className="sea" aria-hidden="true"/>
+    <div className="ambient" aria-hidden="true"><i/><i/><i/></div>
     <header><span>{index===10?"PART TWO: FOR COL":"DAY 2 · SESSION 05"}</span><button onClick={()=>setOverview(true)}>Overview</button></header>
     <section key={index} className={`slide ${direction}`} aria-labelledby="slide-title">
       <div className="copy"><p className="eyebrow">{index===0||index===14?"WHERE AI ACTUALLY HELPS":""}</p><h1 id="slide-title">{title}</h1><p className="lede">{body}</p></div>
