@@ -35,4 +35,8 @@
 @keyframes enter-forward{from{opacity:0;transform:translate3d(16px,14px,0)}}
 @keyframes enter-backward{from{opacity:0;transform:translate3d(-16px,14px,0)}}
 @keyframes reveal{from{opacity:0;transform:translateY(12px)}}
+.staged-item{opacity:0;transform:translateY(30px) scale(.985);pointer-events:none}
+.staged-item:not(.revealed){animation:none!important}
+.staged-item.revealed{pointer-events:auto;animation:stage-drop .62s cubic-bezier(.22,1,.36,1) both!important}
+@keyframes stage-drop{from{opacity:0;transform:translateY(30px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:800px){.slide-dots{bottom:8.2vh;gap:5px}.slide-dots button{width:5px;height:5px}.slide-dots button.active{width:16px}.browser-frame{width:100%}.browser-frame .screen{height:43vh}}
