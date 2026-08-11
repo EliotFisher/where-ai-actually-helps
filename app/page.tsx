@@ -50,6 +50,7 @@ function Visual({ type }: { type: string }) {
 export default function Home() {
   const [index, setIndex] = useState(0), [overview, setOverview] = useState(false), [presenter, setPresenter] = useState(false);
   const [seconds, setSeconds] = useState(0), [running, setRunning] = useState(false), [privateNote, setPrivateNote] = useState("");
+  const [demoLoaded, setDemoLoaded] = useState(false);
   const demoRef = useRef<HTMLIFrameElement>(null);
   const scene = scenes[index];
   const go = (delta:number) => setIndex(i => Math.max(0, Math.min(scenes.length - 1, i + delta)));
@@ -73,7 +74,10 @@ export default function Home() {
         {scene.type==='turn' && <blockquote><strong>AI can make a weak idea look finished.</strong><span>Claude and ChatGPT became my first working pair. The tools accelerated every redesign, but human judgment still determined whether the result was useful.</span></blockquote>}
         {scene.type==='policy' && <Visual type="policy"/>}
         {scene.type==='shift' && <div className="shift"><article><b>COL POLICY INTELLIGENCE</b><h2>Monitor federal policy</h2><p>Collect, normalize, deduplicate, and rank new policy items for human review.</p></article><span>FOCUS<br/>SHIFT →</span><article><b>IOOS ECONOMIC IMPACT</b><h2>Build the evidence base</h2><p>Organize sources, trace claims, compare cases, and support defensible conclusions.</p></article></div>}
-        {scene.type==='demo' && <div className="demo"><iframe ref={demoRef} src="https://ocean-evidence-commons.eliotfi.chatgpt.site/" title="Ocean Evidence Commons live demo"/><div className="demo-fallback"><img src="/deck/demo-fallback.png" alt="Static fallback matching the live-demo scene from the source presentation"/><a href="https://ocean-evidence-commons.eliotfi.chatgpt.site/" target="_blank" rel="noreferrer">Open live demo ↗</a></div></div>}
+        {scene.type==='demo' && <div className={`demo ${demoLoaded?'is-loaded':''}`}>
+          {demoLoaded && <iframe ref={demoRef} src="https://ocean-evidence-commons.eliotfi.chatgpt.site/" title="Ocean Evidence Commons live demo" tabIndex={-1}/>} 
+          {!demoLoaded && <div className="demo-fallback"><img src="/deck/demo-fallback.png" alt="Static fallback matching the live-demo scene from the source presentation"/><div className="demo-actions"><button type="button" onClick={()=>setDemoLoaded(true)}>Load demo</button><a href="https://ocean-evidence-commons.eliotfi.chatgpt.site/" target="_blank" rel="noreferrer">Open live demo ↗</a></div></div>}
+        </div>}
         {scene.type==='value' && <><Visual type="value"/><p className="closing">The prototype is ready to guide a discussion. It is not ready to operate without source checks and human review.</p></>}
         {scene.type==='tools' && <Visual type="tools"/>}
         {scene.type==='prompt' && <div className="prompt"><strong>START HERE<br/><em>Pick one task that takes 20 minutes</em></strong><blockquote>“Help me improve this. First, ask me the questions you need to understand the task, the audience, and what a good result looks like.”</blockquote><p>Then review the result, point out what is wrong or missing, and ask for the next version.</p></div>}
